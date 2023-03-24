@@ -16,6 +16,22 @@
                 this.word_swe = words[0]; this.word_eng = words[1];
             }
         }
+
+        static void Loader(string filePath)
+        {
+            using (StreamReader fileReader = new StreamReader(filePath))
+            {
+                dictionary = new List<SweEngGloss>(); // Empty it!
+                string line = fileReader.ReadLine();
+                while (line != null)
+                {
+                    SweEngGloss glossary = new SweEngGloss(line);
+                    dictionary.Add(glossary);
+                    line = fileReader.ReadLine();
+                }
+            }
+        }
+
         static void Main(string[] args)
         {
             string defaultFile = "..\\..\\..\\dict\\sweeng.lis";
@@ -33,7 +49,7 @@
 
                 else if (command == "help")
                 {
-                    string[] help = 
+                    string[] help =
                     {
                         "  help            - display this help",
                         "  load            - load all words from a file to the list",
@@ -45,37 +61,17 @@
                     };
                     foreach (string info in help) Console.WriteLine(info);
                 }
-                
+
                 else if (command == "load")
                 {
                     if (argument.Length == 2)
                     {
-                        using (StreamReader fileReader = new StreamReader(argument[1]))
-                        {
-                            dictionary = new List<SweEngGloss>(); // Empty it!
-                            string line = fileReader.ReadLine();
-                            while (line != null)
-                            {
-                                SweEngGloss glossary = new SweEngGloss(line);
-                                dictionary.Add(glossary);
-                                line = fileReader.ReadLine();
-                            }
-                        }
+                        Loader(argument[1]);
                     }
 
                     else if (argument.Length == 1)
                     {
-                        using (StreamReader fileReader = new StreamReader(defaultFile))
-                        {
-                            dictionary = new List<SweEngGloss>(); // Empty it!
-                            string line = fileReader.ReadLine();
-                            while (line != null)
-                            {
-                                SweEngGloss glossary = new SweEngGloss(line);
-                                dictionary.Add(glossary);
-                                line = fileReader.ReadLine();
-                            }
-                        }
+                        Loader(defaultFile);
                     }
                 }
                 //FIXME: programmet krashar när man skriver "list" innan man har loadad in listan
