@@ -42,6 +42,18 @@
                     Console.WriteLine($"Swedish for {glossary.word_eng} is {glossary.word_swe}");
             }
         }
+        
+        static void Delete(string deleteSwe, string deleteEng)
+        {
+            int index = -1;
+            for (int i = 0; i < dictionary.Count; i++)
+            {
+                SweEngGloss glossary = dictionary[i];
+                if (glossary.word_swe == deleteSwe && glossary.word_eng == deleteEng)
+                    index = i;
+            }
+            dictionary.RemoveAt(index);
+        }
 
         static void Main(string[] args)
         {
@@ -110,18 +122,12 @@
                     }
                 }
                 //FIXEME: skriv bara "delete ord" inte "delete sveOrd engOrd"
+                //FIXME: krashar när man skriver "delete EngelskaOrdet SvenskaOrdet"
                 else if (command == "delete")
                 {
                     if (argument.Length == 3)
-                    {
-                        int index = -1;
-                        for (int i = 0; i < dictionary.Count; i++)
-                        {
-                            SweEngGloss glossary = dictionary[i];
-                            if (glossary.word_swe == argument[1] && glossary.word_eng == argument[2])
-                                index = i;
-                        }
-                        dictionary.RemoveAt(index);
+                    {                        
+                        Delete(argument[1], argument[2]);
                     }
                     else if (argument.Length == 1)
                     {
@@ -129,14 +135,8 @@
                         string swedish = Console.ReadLine();
                         Console.Write("Write word in English: ");
                         string english = Console.ReadLine();
-                        int index = -1;
-                        for (int i = 0; i < dictionary.Count; i++)
-                        {
-                            SweEngGloss glossary = dictionary[i];
-                            if (glossary.word_swe == swedish && glossary.word_eng == english)
-                                index = i;
-                        }
-                        dictionary.RemoveAt(index);
+                        
+                        Delete(swedish, english);
                     }
                 }
                
