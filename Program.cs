@@ -32,7 +32,8 @@
 
                 else if (command == "help")
                 {
-                    string[] help = {
+                    string[] help = 
+                    {
                         "  help            - display this help",
                         "  load            - load all words from a file to the list",
                         "  list            - display all currently loaded weblinks",
@@ -40,38 +41,38 @@
                         "  delete          - delete a word from the list",
                         "  translate       - translate a specific word from the list",
                         "  quit            - quit the program",
-                                            };
-                    foreach (string h in help) Console.WriteLine(h);
+                    };
+                    foreach (string info in help) Console.WriteLine(info);
                 }
                 
                 else if (command == "load")
                 {
                     if (argument.Length == 2)
                     {
-                        using (StreamReader sr = new StreamReader(argument[1]))
+                        using (StreamReader fileReader = new StreamReader(argument[1]))
                         {
                             dictionary = new List<SweEngGloss>(); // Empty it!
-                            string line = sr.ReadLine();
+                            string line = fileReader.ReadLine();
                             while (line != null)
                             {
-                                SweEngGloss gloss = new SweEngGloss(line);
-                                dictionary.Add(gloss);
-                                line = sr.ReadLine();
+                                SweEngGloss glossary = new SweEngGloss(line);
+                                dictionary.Add(glossary);
+                                line = fileReader.ReadLine();
                             }
                         }
                     }
 
                     else if (argument.Length == 1)
                     {
-                        using (StreamReader sr = new StreamReader(defaultFile))
+                        using (StreamReader fileReader = new StreamReader(defaultFile))
                         {
                             dictionary = new List<SweEngGloss>(); // Empty it!
-                            string line = sr.ReadLine();
+                            string line = fileReader.ReadLine();
                             while (line != null)
                             {
-                                SweEngGloss gloss = new SweEngGloss(line);
-                                dictionary.Add(gloss);
-                                line = sr.ReadLine();
+                                SweEngGloss glossary = new SweEngGloss(line);
+                                dictionary.Add(glossary);
+                                line = fileReader.ReadLine();
                             }
                         }
                     }
@@ -79,9 +80,9 @@
 
                 else if (command == "list")
                 {
-                    foreach (SweEngGloss gloss in dictionary)
+                    foreach (SweEngGloss glossary in dictionary)
                     {
-                        Console.WriteLine($"{gloss.word_swe,-10}  - {gloss.word_eng,-10}");
+                        Console.WriteLine($"{glossary.word_swe,-10}  - {glossary.word_eng,-10}");
                     }
                 }
 
@@ -94,10 +95,10 @@
                     else if (argument.Length == 1)
                     {
                         Console.WriteLine("Write word in Swedish: ");
-                        string s = Console.ReadLine();
+                        string swedish = Console.ReadLine();
                         Console.Write("Write word in English: ");
-                        string e = Console.ReadLine();
-                        dictionary.Add(new SweEngGloss(s, e));
+                        string english = Console.ReadLine();
+                        dictionary.Add(new SweEngGloss(swedish, english));
                     }
                 }
 
@@ -108,8 +109,8 @@
                         int index = -1;
                         for (int i = 0; i < dictionary.Count; i++)
                         {
-                            SweEngGloss gloss = dictionary[i];
-                            if (gloss.word_swe == argument[1] && gloss.word_eng == argument[2])
+                            SweEngGloss glossary = dictionary[i];
+                            if (glossary.word_swe == argument[1] && glossary.word_eng == argument[2])
                                 index = i;
                         }
                         dictionary.RemoveAt(index);
@@ -117,14 +118,14 @@
                     else if (argument.Length == 1)
                     {
                         Console.WriteLine("Write word in Swedish: ");
-                        string s = Console.ReadLine();
+                        string swedish = Console.ReadLine();
                         Console.Write("Write word in English: ");
-                        string e = Console.ReadLine();
+                        string english = Console.ReadLine();
                         int index = -1;
                         for (int i = 0; i < dictionary.Count; i++)
                         {
-                            SweEngGloss gloss = dictionary[i];
-                            if (gloss.word_swe == s && gloss.word_eng == e)
+                            SweEngGloss glossary = dictionary[i];
+                            if (glossary.word_swe == swedish && glossary.word_eng == english)
                                 index = i;
                         }
                         dictionary.RemoveAt(index);
@@ -135,24 +136,24 @@
                 {
                     if (argument.Length == 2)
                     {
-                        foreach (SweEngGloss gloss in dictionary)
+                        foreach (SweEngGloss glossary in dictionary)
                         {
-                            if (gloss.word_swe == argument[1])
-                                Console.WriteLine($"English for {gloss.word_swe} is {gloss.word_eng}");
-                            if (gloss.word_eng == argument[1])
-                                Console.WriteLine($"Swedish for {gloss.word_eng} is {gloss.word_swe}");
+                            if (glossary.word_swe == argument[1])
+                                Console.WriteLine($"English for {glossary.word_swe} is {glossary.word_eng}");
+                            if (glossary.word_eng == argument[1])
+                                Console.WriteLine($"Swedish for {glossary.word_eng} is {glossary.word_swe}");
                         }
                     }
                     else if (argument.Length == 1)
                     {
                         Console.WriteLine("Write word to be translated: ");
-                        string s = Console.ReadLine();
-                        foreach (SweEngGloss gloss in dictionary)
+                        string translateWord = Console.ReadLine();
+                        foreach (SweEngGloss glossary in dictionary)
                         {
-                            if (gloss.word_swe == s)
-                                Console.WriteLine($"English for {gloss.word_swe} is {gloss.word_eng}");
-                            if (gloss.word_eng == s)
-                                Console.WriteLine($"Swedish for {gloss.word_eng} is {gloss.word_swe}");
+                            if (glossary.word_swe == translateWord)
+                                Console.WriteLine($"English for {glossary.word_swe} is {glossary.word_eng}");
+                            if (glossary.word_eng == translateWord)
+                                Console.WriteLine($"Swedish for {glossary.word_eng} is {glossary.word_swe}");
                         }
                     }
                 }
