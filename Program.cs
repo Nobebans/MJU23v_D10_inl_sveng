@@ -42,7 +42,7 @@
                     Console.WriteLine($"Swedish for {glossary.word_eng} is {glossary.word_swe}");
             }
         }
-        
+
         static void Delete(string deleteSwe, string deleteEng)
         {
             int index = -1;
@@ -53,6 +53,13 @@
                     index = i;
             }
             dictionary.RemoveAt(index);
+        }
+
+        static string ReadWord(string text)
+        {
+            Console.WriteLine(text);
+            string awnser = Console.ReadLine();
+            return awnser;
         }
 
         static void Main(string[] args)
@@ -114,10 +121,8 @@
                     }
                     else if (argument.Length == 1)
                     {
-                        Console.WriteLine("Write word in Swedish: ");
-                        string swedish = Console.ReadLine();
-                        Console.Write("Write word in English: ");
-                        string english = Console.ReadLine();
+                        string swedish = ReadWord("Write word in Swedish: ");
+                        string english = ReadWord("Write word in English: ");
                         dictionary.Add(new SweEngGloss(swedish, english));
                     }
                 }
@@ -126,30 +131,28 @@
                 else if (command == "delete")
                 {
                     if (argument.Length == 3)
-                    {                        
+                    {
                         Delete(argument[1], argument[2]);
                     }
                     else if (argument.Length == 1)
                     {
-                        Console.WriteLine("Write word in Swedish: ");
-                        string swedish = Console.ReadLine();
-                        Console.Write("Write word in English: ");
-                        string english = Console.ReadLine();
-                        
+                        string swedish = ReadWord("Write word in Swedish: ");
+                        string english = ReadWord("Write word in English: ");
+
                         Delete(swedish, english);
                     }
                 }
-               
+
                 else if (command == "translate")
                 {
                     if (argument.Length == 2)
-                    {                        
+                    {
                         Translator(argument[1]);
                     }
                     else if (argument.Length == 1)
                     {
                         Console.WriteLine("Write word to be translated: ");
-                        string translateWord = Console.ReadLine();                        
+                        string translateWord = Console.ReadLine();
                         Translator(translateWord);
                     }
                 }
