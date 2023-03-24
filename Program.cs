@@ -25,6 +25,7 @@
                 Console.Write("> ");
                 string[] argument = Console.ReadLine().Split();
                 string command = argument[0];
+                //FIXME: stängs inte av när man skriver "quit"
                 if (command == "quit")
                 {
                     Console.WriteLine("Goodbye!");
@@ -77,7 +78,7 @@
                         }
                     }
                 }
-
+                //FIXME: programmet krashar när man skriver "list" innan man har loadad in listan
                 else if (command == "list")
                 {
                     foreach (SweEngGloss glossary in dictionary)
@@ -85,7 +86,7 @@
                         Console.WriteLine($"{glossary.word_swe,-10}  - {glossary.word_eng,-10}");
                     }
                 }
-
+                //FIXME: gör en tom text fil om man inte laddad in lista redan
                 else if (command == "new")
                 {
                     if (argument.Length == 3)
@@ -101,7 +102,7 @@
                         dictionary.Add(new SweEngGloss(swedish, english));
                     }
                 }
-
+                //FIXEME: skriv bara "delete ord" inte "delete sveOrd engOrd"
                 else if (command == "delete")
                 {
                     if (argument.Length == 3)
@@ -131,7 +132,7 @@
                         dictionary.RemoveAt(index);
                     }
                 }
-
+                //FIXME: koddubblett
                 else if (command == "translate")
                 {
                     if (argument.Length == 2)
