@@ -32,6 +32,17 @@
             }
         }
 
+        static void Translator(string translate)
+        {
+            foreach (SweEngGloss glossary in dictionary)
+            {
+                if (glossary.word_swe == translate)
+                    Console.WriteLine($"English for {glossary.word_swe} is {glossary.word_eng}");
+                if (glossary.word_eng == translate)
+                    Console.WriteLine($"Swedish for {glossary.word_eng} is {glossary.word_swe}");
+            }
+        }
+
         static void Main(string[] args)
         {
             string defaultFile = "..\\..\\..\\dict\\sweeng.lis";
@@ -128,30 +139,18 @@
                         dictionary.RemoveAt(index);
                     }
                 }
-                //FIXME: koddubblett
+               
                 else if (command == "translate")
                 {
                     if (argument.Length == 2)
-                    {
-                        foreach (SweEngGloss glossary in dictionary)
-                        {
-                            if (glossary.word_swe == argument[1])
-                                Console.WriteLine($"English for {glossary.word_swe} is {glossary.word_eng}");
-                            if (glossary.word_eng == argument[1])
-                                Console.WriteLine($"Swedish for {glossary.word_eng} is {glossary.word_swe}");
-                        }
+                    {                        
+                        Translator(argument[1]);
                     }
                     else if (argument.Length == 1)
                     {
                         Console.WriteLine("Write word to be translated: ");
-                        string translateWord = Console.ReadLine();
-                        foreach (SweEngGloss glossary in dictionary)
-                        {
-                            if (glossary.word_swe == translateWord)
-                                Console.WriteLine($"English for {glossary.word_swe} is {glossary.word_eng}");
-                            if (glossary.word_eng == translateWord)
-                                Console.WriteLine($"Swedish for {glossary.word_eng} is {glossary.word_swe}");
-                        }
+                        string translateWord = Console.ReadLine();                        
+                        Translator(translateWord);
                     }
                 }
                 else
