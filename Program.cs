@@ -2,7 +2,7 @@
 {
     internal class Program
     {
-        static List<SweEngGloss> dictionary;
+        static List<SweEngGloss> dictionary = new List<SweEngGloss>();
         class SweEngGloss
         {
             public string word_swe, word_eng;
@@ -18,7 +18,7 @@
         }
 
         static void Loader(string filePath)
-        {
+        {            
             using (StreamReader fileReader = new StreamReader(filePath))
             {
                 dictionary = new List<SweEngGloss>(); // Empty it!
@@ -64,17 +64,19 @@
 
         static void Main(string[] args)
         {
-            string defaultFile = "..\\..\\..\\dict\\sweeng.lis";
+            var quit = false;
+            string defaultFile = "sweeng.lis";
             Console.WriteLine("Welcome to the dictionary app!");
             do
             {
                 Console.Write("> ");
                 string[] argument = Console.ReadLine().Split();
                 string command = argument[0];
-                //FIXME: stängs inte av när man skriver "quit"
+
                 if (command == "quit")
                 {
                     Console.WriteLine("Goodbye!");
+                    quit = true;
                 }
 
                 else if (command == "help")
@@ -96,23 +98,38 @@
                 {
                     if (argument.Length == 2)
                     {
-                        Loader(argument[1]);
+                        try
+                        {
+                            Loader($"{argument[1]}");
+                        }
+                        catch (FileNotFoundException ex)
+                        {
+                            var fileStream = File.Create(argument[1]);
+                            fileStream.Close();
+                            Loader(argument[1]);
+                        }
                     }
-
                     else if (argument.Length == 1)
                     {
                         Loader(defaultFile);
                     }
-                }
-                //FIXME: programmet krashar när man skriver "list" innan man har loadad in listan
+                }      
+                
                 else if (command == "list")
                 {
-                    foreach (SweEngGloss glossary in dictionary)
+                    try
                     {
-                        Console.WriteLine($"{glossary.word_swe,-10}  - {glossary.word_eng,-10}");
+                        foreach (SweEngGloss glossary in dictionary)
+                        {
+                            Console.WriteLine($"{glossary.word_swe,-10}  - {glossary.word_eng,-10}");
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Nothing to list, please load a file first!");
                     }
                 }
-                //FIXME: gör en tom text fil om man inte laddad in lista redan
+                
                 else if (command == "new")
                 {
                     if (argument.Length == 3)
@@ -128,12 +145,13 @@
                 }
                 //FIXEME: skriv bara "delete ord" inte "delete sveOrd engOrd"
                 //FIXME: krashar när man skriver "delete EngelskaOrdet SvenskaOrdet"
+                //Exception när man inte laddat in innan
                 else if (command == "delete")
                 {
                     if (argument.Length == 3)
                     {
                         Delete(argument[1], argument[2]);
-                    }
+                    }                    
                     else if (argument.Length == 1)
                     {
                         string swedish = ReadWord("Write word in Swedish: ");
@@ -161,7 +179,7 @@
                     Console.WriteLine($"Unknown command: '{command}'");
                 }
             }
-            while (true);
+            while (quit == false);
         }
     }
 }
