@@ -18,10 +18,10 @@
         }
 
         static void Loader(string filePath)
-        {            
+        {
             using (StreamReader fileReader = new StreamReader(filePath))
             {
-                dictionary = new List<SweEngGloss>(); // Empty it!
+                dictionary = new List<SweEngGloss>();
                 string line = fileReader.ReadLine();
                 while (line != null)
                 {
@@ -43,16 +43,18 @@
             }
         }
 
-        static void Delete(string deleteSwe, string deleteEng)
+        static void Delete(string deleteSweOrEng1, string deleteSweOrEng2)
         {
-            int index = -1;
             for (int i = 0; i < dictionary.Count; i++)
             {
                 SweEngGloss glossary = dictionary[i];
-                if (glossary.word_swe == deleteSwe && glossary.word_eng == deleteEng)
-                    index = i;
+                if ((glossary.word_swe == deleteSweOrEng1 && glossary.word_eng == deleteSweOrEng2) ||
+                    (glossary.word_eng == deleteSweOrEng1 && glossary.word_swe == deleteSweOrEng2))
+                {
+                    dictionary.RemoveAt(i);
+                    i--;
+                }
             }
-            dictionary.RemoveAt(index);
         }
 
         static string ReadWord(string text)
@@ -113,8 +115,8 @@
                     {
                         Loader(defaultFile);
                     }
-                }      
-                
+                }
+
                 else if (command == "list")
                 {
                     try
@@ -129,7 +131,7 @@
                         Console.WriteLine("Nothing to list, please load a file first!");
                     }
                 }
-                
+
                 else if (command == "new")
                 {
                     if (argument.Length == 3)
@@ -142,22 +144,41 @@
                         string english = ReadWord("Write word in English: ");
                         dictionary.Add(new SweEngGloss(swedish, english));
                     }
-                }
-                //FIXEME: skriv bara "delete ord" inte "delete sveOrd engOrd"
-                //FIXME: krashar när man skriver "delete EngelskaOrdet SvenskaOrdet"
-                //Exception när man inte laddat in innan
+                }                
+                
                 else if (command == "delete")
                 {
-                    if (argument.Length == 3)
+                    try
                     {
-                        Delete(argument[1], argument[2]);
-                    }                    
-                    else if (argument.Length == 1)
-                    {
-                        string swedish = ReadWord("Write word in Swedish: ");
-                        string english = ReadWord("Write word in English: ");
+                        if (argument.Length == 3)
+                        {
+                            Delete(argument[1], argument[2]);
+                        }
+                        else if (argument.Length == 2)
+                        {
+                            string wordToDelete = argument[1];
 
-                        Delete(swedish, english);
+                            for (int i = 0; i < dictionary.Count; i++)
+                            {
+                                SweEngGloss glossary = dictionary[i];
+                                if (glossary.word_swe == wordToDelete || glossary.word_eng == wordToDelete)
+                                {
+                                    dictionary.RemoveAt(i);
+                                    i--;
+                                }
+                            }
+                        }
+                        else if (argument.Length == 1)
+                        {
+                            string swedish = ReadWord("Write word in Swedish: ");
+                            string english = ReadWord("Write word in English: ");
+
+                            Delete(swedish, english);
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine("There are no words to delete.");
                     }
                 }
 
